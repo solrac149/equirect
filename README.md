@@ -1,0 +1,2 @@
+# equirect
+Equirectangular image viewer
