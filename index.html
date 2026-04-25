@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Equirectangular 3D Viewer</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main id="picker" class="picker" aria-labelledby="picker-title">
+      <div class="picker-header">
+        <p class="eyebrow">360 panoramas</p>
+        <h1 id="picker-title">Choose an image</h1>
+      </div>
+
+      <section id="image-grid" class="image-grid" aria-label="Available images"></section>
+    </main>
+
+    <main id="viewer" class="viewer is-hidden" aria-label="Equirectangular 3D image viewer">
+      <canvas id="scene"></canvas>
+
+      <div id="loading" class="loading" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Loading image</span>
+      </div>
+
+      <button id="close-viewer" class="close-button" type="button" title="Close viewer" aria-label="Close viewer">
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <section class="toolbar" aria-label="Viewer controls">
+        <button id="reset" class="icon-button" type="button" title="Reset view" aria-label="Reset view">
+          <span aria-hidden="true">↺</span>
+        </button>
+        <button id="autorotate" class="icon-button is-active" type="button" title="Toggle auto rotate" aria-label="Toggle auto rotate" aria-pressed="true">
+          <span aria-hidden="true">⟳</span>
+        </button>
+        <button id="zoom-out" class="icon-button" type="button" title="Zoom out" aria-label="Zoom out">
+          <span aria-hidden="true">−</span>
+        </button>
+        <label class="range-control" title="Field of view">
+          <span>FOV</span>
+          <input id="fov" type="range" min="35" max="95" value="70" aria-label="Field of view">
+        </label>
+        <button id="zoom-in" class="icon-button" type="button" title="Zoom in" aria-label="Zoom in">
+          <span aria-hidden="true">+</span>
+        </button>
+        <button id="fullscreen" class="icon-button" type="button" title="Fullscreen" aria-label="Fullscreen">
+          <span aria-hidden="true">⛶</span>
+        </button>
+      </section>
+    </main>
+
+    <script type="module" src="./viewer.js"></script>
+  </body>
+</html>

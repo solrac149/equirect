@@ -1,0 +1,17 @@
+- main "Equirectangular 3D image viewer" [ref=e2]:
+  - status [ref=e4]:
+    - generic [ref=e6]: Loading image
+  - region "Viewer controls" [ref=e7]:
+    - button "Reset view" [ref=e8] [cursor=pointer]:
+      - generic [ref=e9]: ↺
+    - button "Toggle auto rotate" [pressed] [ref=e10] [cursor=pointer]:
+      - generic [ref=e11]: ⟳
+    - button "Zoom out" [ref=e12] [cursor=pointer]:
+      - generic [ref=e13]: −
+    - generic "Field of view" [ref=e14]:
+      - generic [ref=e15]: FOV
+      - slider "Field of view" [ref=e16]: "70"
+    - button "Zoom in" [ref=e17] [cursor=pointer]:
+      - generic [ref=e18]: +
+    - button "Fullscreen" [ref=e19] [cursor=pointer]:
+      - generic [ref=e20]: ⛶

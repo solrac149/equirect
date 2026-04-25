@@ -1,0 +1,335 @@
+:root {
+  color-scheme: dark;
+  --panel: rgb(18 22 26 / 78%);
+  --panel-strong: rgb(9 11 14 / 88%);
+  --line: rgb(255 255 255 / 18%);
+  --text: #f3f7fb;
+  --muted: #aeb8c2;
+  --accent: #3ed0a3;
+  --focus: #ffd166;
+  --picker-background: linear-gradient(#050608, #050608);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: #050608;
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.picker {
+  min-height: 100vh;
+  padding: clamp(22px, 4vw, 48px);
+  background-image:
+    linear-gradient(180deg, rgb(5 6 8 / 36%), #050608 68%),
+    var(--picker-background);
+  background-position: center;
+  background-size: cover;
+}
+
+.picker-header {
+  width: min(100%, 1120px);
+  margin: 0 auto 22px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(38px, 7vw, 86px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+}
+
+.picker-status {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.image-card {
+  position: relative;
+  display: grid;
+  min-height: 220px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #12161a;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 18px 60px rgb(0 0 0 / 32%);
+}
+
+.image-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 26%, rgb(0 0 0 / 76%));
+  pointer-events: none;
+}
+
+.image-card:hover img,
+.image-card:focus-visible img {
+  transform: scale(1.035);
+}
+
+.image-card:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.image-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 220ms ease;
+}
+
+.image-card span {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  padding: 18px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  min-width: 320px;
+  min-height: 320px;
+  background: #050608;
+  touch-action: none;
+  user-select: none;
+}
+
+.is-hidden {
+  display: none;
+}
+
+#scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#scene.is-dragging {
+  cursor: grabbing;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 168px;
+  justify-content: center;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.loading.is-hidden {
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgb(255 255 255 / 22%);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: spin 800ms linear infinite;
+}
+
+.toolbar {
+  position: absolute;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: min(calc(100vw - 24px), 580px);
+  min-height: 52px;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 16px 50px rgb(0 0 0 / 34%);
+  backdrop-filter: blur(18px);
+  transform: translateX(-50%);
+}
+
+.close-button {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  font: 500 32px/1 ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 16px 50px rgb(0 0 0 / 34%);
+  backdrop-filter: blur(18px);
+}
+
+.close-button:hover {
+  background: rgb(255 255 255 / 14%);
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 8%);
+  color: var(--text);
+  font: 600 21px/1 ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: rgb(255 255 255 / 14%);
+}
+
+.icon-button:focus-visible,
+.close-button:focus-visible,
+.range-control input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.icon-button.is-active {
+  border-color: rgb(62 208 163 / 55%);
+  background: rgb(62 208 163 / 18%);
+  color: #d9fff4;
+}
+
+.range-control {
+  display: grid;
+  grid-template-columns: auto minmax(90px, 1fr);
+  align-items: center;
+  gap: 9px;
+  flex: 1 1 220px;
+  min-width: 116px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 7%);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.range-control input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 520px) {
+  .picker {
+    padding: 20px 12px;
+  }
+
+  .picker-header {
+    margin-bottom: 16px;
+  }
+
+  .image-grid {
+    gap: 12px;
+  }
+
+  .image-card {
+    min-height: 176px;
+  }
+
+  .image-card span {
+    padding: 14px;
+    font-size: 20px;
+  }
+
+  .toolbar {
+    gap: 5px;
+    min-height: 48px;
+    padding: 6px;
+  }
+
+  .icon-button {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+  }
+
+  .range-control {
+    grid-template-columns: 1fr;
+    gap: 0;
+    height: 34px;
+    min-width: 92px;
+    padding: 0 8px;
+  }
+
+  .range-control span {
+    display: none;
+  }
+}

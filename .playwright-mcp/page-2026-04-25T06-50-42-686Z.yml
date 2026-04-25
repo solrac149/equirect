@@ -1,0 +1,9 @@
+- main "Choose an image" [ref=e2]:
+  - generic [ref=e3]:
+    - paragraph [ref=e4]: 360 panoramas
+    - heading "Choose an image" [level=1] [ref=e5]
+  - region "Available images" [ref=e6]:
+    - button "Open Angel Falls" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8]: Angel Falls
+    - button "Open Buenos Aires" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: Buenos Aires
