@@ -1,6 +1,7 @@
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
 
 const imageDirectory = "./Images/";
+const imageManifest = "./images.json";
 const imageExtensions = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"]);
 
 const picker = document.querySelector("#picker");
@@ -64,23 +65,22 @@ function isImagePath(path) {
 }
 
 async function getImages() {
-  const response = await fetch(imageDirectory);
+  const response = await fetch(imageManifest);
 
   if (!response.ok) {
-    throw new Error(`Could not read ${imageDirectory}`);
+    throw new Error(`Could not read ${imageManifest}`);
   }
 
-  const html = await response.text();
-  const doc = new DOMParser().parseFromString(html, "text/html");
+  const manifest = await response.json();
   const seen = new Set();
 
-  return [...doc.querySelectorAll("a[href]")]
-    .map((link) => new URL(link.getAttribute("href"), response.url))
-    .filter((url) => isImagePath(url.pathname))
-    .map((url) => {
-      const src = `${imageDirectory}${encodeURIComponent(decodeURIComponent(url.pathname.split("/").pop()))}`;
-      return { title: getImageTitle(src), src };
+  return manifest
+    .map((image) => {
+      const src = typeof image === "string" ? image : image.src;
+      const title = typeof image === "string" ? getImageTitle(image) : image.title || getImageTitle(image.src);
+      return { title, src };
     })
+    .filter((image) => image.src && isImagePath(image.src))
     .filter((image) => {
       if (seen.has(image.src)) {
         return false;
@@ -323,6 +323,6 @@ window.addEventListener("resize", resize);
 getImages()
   .then(createPicker)
   .catch(() => {
-    renderPickerError("The Images folder could not be read by this server.");
+    renderPickerError("The image list could not be loaded.");
   });
 requestAnimationFrame(render);
